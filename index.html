@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Qanadila — Cookies</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #fdf6ec;
+      --warm-white: #fffdf8;
+      --brown-deep: #2c1a0e;
+      --brown-mid: #5c3a1e;
+      --brown-light: #a0633a;
+      --gold: #c9973e;
+      --gold-light: #e8c97a;
+      --rose: #d4867a;
+      --rose-light: #f2c4bc;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--cream);
+      color: var(--brown-deep);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .font-display { font-family: 'Nunito', sans-serif; }
+    .font-serif { font-family: 'DM Sans', sans-serif; font-style: italic; }
+
+    /* Grain texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+    }
+
+    /* Navbar */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      transition: all 0.4s ease;
+    }
+    nav.scrolled {
+      background: rgba(253,246,236,0.95);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 20px rgba(44,26,14,0.08);
+    }
+
+    /* Hero */
+    .hero-bg {
+      background: linear-gradient(135deg, #2c1a0e 0%, #5c3a1e 40%, #8b5032 70%, #c9973e 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(201,151,62,0.3) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(212,134,122,0.2) 0%, transparent 50%);
+    }
+    .hero-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(201,151,62,0.08);
+      border: 1px solid rgba(201,151,62,0.15);
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(2deg); }
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .animate-fade-up { animation: fadeUp 0.8s ease forwards; }
+    .animate-fade-in { animation: fadeIn 1s ease forwards; }
+    .animate-float { animation: float 4s ease-in-out infinite; }
+    .animate-marquee { animation: marquee 20s linear infinite; }
+    .animate-spin-slow { animation: spin-slow 20s linear infinite; }
+
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+    .delay-400 { animation-delay: 0.4s; }
+    .delay-500 { animation-delay: 0.5s; }
+    .delay-600 { animation-delay: 0.6s; }
+
+    .opacity-0 { opacity: 0; }
+
+    /* Product Card */
+    .product-card {
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 24px 48px rgba(44,26,14,0.15);
+    }
+
+    /* Gold divider */
+    .divider-gold {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+
+    /* Shimmer button */
+    .btn-gold {
+      background: linear-gradient(90deg, #c9973e, #e8c97a, #c9973e, #a0633a);
+      background-size: 300% 100%;
+      animation: shimmer 3s linear infinite;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201,151,62,0.4);
+    }
+
+    /* Testimonial card */
+    .testimonial-card {
+      transition: transform 0.3s ease;
+    }
+    .testimonial-card:hover {
+      transform: translateY(-4px);
+    }
+
+    /* Scroll indicator */
+    @keyframes bounce-gentle {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+    .bounce-gentle { animation: bounce-gentle 2s ease infinite; }
+
+    /* Section reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Ornament */
+    .ornament { letter-spacing: 0.3em; }
+
+    /* Menu tabs */
+    .tab-btn {
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 50%; right: 50%;
+      height: 2px;
+      background: var(--gold);
+      transition: all 0.3s ease;
+    }
+    .tab-btn.active::after, .tab-btn:hover::after {
+      left: 0; right: 0;
+    }
+    .tab-btn.active { color: var(--brown-deep); }
+
+    /* Image placeholder */
+    .img-placeholder {
+      background: linear-gradient(135deg, #e8d5c0, #c9a882, #a0795a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+
+    /* Wavy section divider */
+    .wave-divider {
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="navbar" class="px-6 md:px-12 py-5">
+  <div class="max-w-7xl mx-auto flex items-center justify-between">
+    <a href="#" class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-full flex items-center justify-center border-2" style="border-color: var(--gold); background: rgba(201,151,62,0.1)">
+        <span style="color: var(--gold); font-size: 1rem;">✦</span>
+      </div>
+       <img src="images/logo.png" alt="Qanadila" id="nav-logo" class="h-20 w-auto object-contain" />
+    </a>
+
+    <!-- Desktop Nav -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#tentang" class="font-light text-sm tracking-wider hover:opacity-70 transition-opacity" style="color: var(--brown-mid)">Tentang</a>
+      <a href="#menu" class="font-light text-sm tracking-wider hover:opacity-70 transition-opacity" style="color: var(--brown-mid)">Menu</a>
+      <a href="#testimoni" class="font-light text-sm tracking-wider hover:opacity-70 transition-opacity" style="color: var(--brown-mid)">Ulasan</a>
+      <a href="#kontak" class="font-light text-sm tracking-wider hover:opacity-70 transition-opacity" style="color: var(--brown-mid)">Kontak</a>
+    </div>
+
+    <a href="https://wa.me/6289508734321" target="_blank"
+      class="hidden md:block px-6 py-2.5 rounded-full text-sm font-medium tracking-wider text-white"
+      style="background: var(--brown-mid)">
+      Pesan Sekarang
+    </a>
+
+    <!-- Mobile menu btn -->
+    <button onclick="toggleMenu()" class="md:hidden p-2" style="color: var(--brown-deep)">
+      <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 border-t" style="border-color: rgba(201,151,62,0.2)">
+    <div class="flex flex-col gap-4 pt-4 px-2">
+      <a href="#tentang" onclick="toggleMenu()" class="text-sm tracking-wider" style="color: var(--brown-mid)">Tentang</a>
+      <a href="#menu" onclick="toggleMenu()" class="text-sm tracking-wider" style="color: var(--brown-mid)">Menu</a>
+      <a href="#testimoni" onclick="toggleMenu()" class="text-sm tracking-wider" style="color: var(--brown-mid)">Ulasan</a>
+      <a href="#kontak" onclick="toggleMenu()" class="text-sm tracking-wider" style="color: var(--brown-mid)">Kontak</a>
+      <a href="https://wa.me/6289508734321" target="_blank"
+        class="px-6 py-2.5 rounded-full text-sm font-medium text-white text-center"
+        style="background: var(--brown-mid)">Pesan Sekarang</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero-bg min-h-screen flex items-center justify-center relative pt-20">
+  <!-- Decorative circles -->
+  <div class="hero-circle w-96 h-96 -top-20 -right-20 opacity-50"></div>
+  <div class="hero-circle w-64 h-64 bottom-20 -left-10 opacity-30"></div>
+  <div class="hero-circle w-32 h-32 top-1/3 left-1/4 opacity-20"></div>
+
+  <!-- Floating ornaments -->
+  <div class="absolute top-1/4 right-1/5 animate-float delay-200 opacity-30 text-3xl" style="color: var(--gold-light)">✦</div>
+  <div class="absolute bottom-1/3 left-1/6 animate-float delay-500 opacity-20 text-2xl" style="color: var(--gold-light)">◆</div>
+  <div class="absolute top-1/2 right-1/6 animate-float delay-300 opacity-25 text-xl" style="color: var(--gold-light)">✿</div>
+
+  <div class="max-w-5xl mx-auto px-6 text-center relative z-10">
+    <p class="ornament text-xs font-medium tracking-widest mb-6 opacity-0 animate-fade-up delay-100" style="color: var(--gold-light)">
+      ✦ &nbsp; ARTISAN BAKERY &amp; PASTRY &nbsp; ✦
+    </p>
+
+    <h1 class="font-display text-6xl md:text-8xl lg:text-9xl font-bold leading-none mb-6 opacity-0 animate-fade-up delay-200"
+      style="color: var(--warm-white)">
+      Qanadila
+    </h1>
+
+    <p class="font-serif text-xl md:text-3xl italic mb-4 opacity-0 animate-fade-up delay-300" style="color: var(--gold-light)">
+      Dibuat dengan cinta, disajikan dengan keindahan
+    </p>
+
+    <p class="text-sm md:text-base font-light tracking-wide max-w-xl mx-auto mb-12 opacity-0 animate-fade-up delay-400"
+      style="color: rgba(255,255,255,0.7)">
+      Setiap kue adalah karya seni yang menghadirkan kebahagiaan di setiap gigitan. Dari bahan-bahan pilihan terbaik untuk momen yang tak terlupakan.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-up delay-500">
+      <a href="#menu" class="btn-gold px-8 py-4 rounded-full font-medium tracking-wider text-white shadow-lg">
+        Lihat Menu Kami
+      </a>
+      <a href="#kontak" class="px-8 py-4 rounded-full font-medium tracking-wider border"
+        style="color: var(--gold-light); border-color: rgba(201,151,62,0.4); backdrop-filter: blur(8px); background: rgba(255,255,255,0.05)">
+        Hubungi Kami
+      </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="mt-20 grid grid-cols-3 gap-8 max-w-lg mx-auto opacity-0 animate-fade-up delay-600">
+      <div class="text-center">
+        <p class="font-display text-3xl font-bold" style="color: var(--gold-light)">500+</p>
+        <p class="text-xs tracking-widest mt-1" style="color: rgba(255,255,255,0.5)">PELANGGAN</p>
+      </div>
+      <div class="text-center border-x" style="border-color: rgba(201,151,62,0.2)">
+        <p class="font-display text-3xl font-bold" style="color: var(--gold-light)">50+</p>
+        <p class="text-xs tracking-widest mt-1" style="color: rgba(255,255,255,0.5)">VARIAN KUE</p>
+      </div>
+      <div class="text-center">
+        <p class="font-display text-3xl font-bold" style="color: var(--gold-light)">5★</p>
+        <p class="text-xs tracking-widest mt-1" style="color: rgba(255,255,255,0.5)">RATING</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 bounce-gentle" style="color: rgba(255,255,255,0.4)">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
+    </svg>
+  </div>
+
+  <!-- Wave -->
+  <svg class="wave-divider" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 40C240 80 480 0 720 40C960 80 1200 0 1440 40V80H0V40Z" fill="#fdf6ec"/>
+  </svg>
+</section>
+
+<!-- ===== MARQUEE ===== -->
+<div class="py-5 overflow-hidden" style="background: var(--gold); color: var(--brown-deep)">
+  <div class="flex animate-marquee whitespace-nowrap">
+    <span class="mx-8 font-display italic text-sm font-semibold">Wedding Cake</span>
+    <span class="mx-4 opacity-50">✦</span>
+    <span class="mx-8 font-display italic text-sm font-semibold">Birthday Cake</span>
+    <span class="mx-4 opacity-50">✦</span>
+    <span class="mx-8 font-display italic text-sm font-semibold">Tart & Pastry</span>
+    <span class="mx-4 opacity-50">✦</span>
+    <span class="mx-8 font-display italic text-sm font-semibold">Custom Order</span>
+    <span class="mx-4 opacity-50">✦</span>
+    <span class="mx-8 font-display italic text-sm font-semibold">Hampers Lebaran</span>
+    <span class="mx-4 opacity-50">✦</span>
+    <span class="mx-8 font-display italic text-sm font-semibold">Cookies & Snack</span>
+    <span class="mx-4 opacity-50">✦</span>
+    <!-- Duplicate -->
+    <span class="mx-8 font-display italic text-sm font-semibold">Wedding Cake</span>
+    <span class="mx-4 opacity-50">✦</span>
+    <span class="mx-8 font-display italic text-sm font-semibold">Birthday Cake</span>
+    <span class="mx-4 opacity-50">✦</span>
+    <span class="mx-8 font-display italic text-sm font-semibold">Tart & Pastry</span>
+    <span class="mx-4 opacity-50">✦</span>
+    <span class="mx-8 font-display italic text-sm font-semibold">Custom Order</span>
+    <span class="mx-4 opacity-50">✦</span>
+    <span class="mx-8 font-display italic text-sm font-semibold">Hampers Lebaran</span>
+    <span class="mx-4 opacity-50">✦</span>
+    <span class="mx-8 font-display italic text-sm font-semibold">Cookies & Snack</span>
+    <span class="mx-4 opacity-50">✦</span>
+  </div>
+</div>
+
+<!-- ===== TENTANG ===== -->
+<section id="tentang" class="py-24 md:py-32 px-6 md:px-12">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+      <div class="reveal">
+        <p class="ornament text-xs tracking-widest font-medium mb-4" style="color: var(--gold)">✦ TENTANG KAMI</p>
+        <h2 class="font-display text-4xl md:text-5xl font-bold leading-tight mb-6" style="color: var(--brown-deep)">
+          Keahlian yang<br/><em>Diwariskan</em> dengan Cinta
+        </h2>
+        <div class="divider-gold my-6 w-24"></div>
+        <p class="font-serif text-lg leading-relaxed mb-4" style="color: var(--brown-mid)">
+          Qanadila lahir dari hasrat mendalam akan seni membuat kue. Setiap produk kami dikerjakan dengan tangan menggunakan bahan-bahan premium pilihan, memastikan cita rasa autentik yang tak terlupakan.
+        </p>
+        <p class="font-light text-sm leading-relaxed mb-8" style="color: var(--brown-light)">
+          Kami percaya bahwa sebuah kue bukan sekadar makanan — ia adalah ekspresi kasih sayang, sebuah karya yang menciptakan kenangan indah dalam setiap perayaan hidupmu.
+        </p>
+
+        <div class="grid grid-cols-2 gap-6">
+          <div class="p-5 rounded-2xl" style="background: rgba(201,151,62,0.08); border: 1px solid rgba(201,151,62,0.15)">
+            <div class="text-2xl mb-2">🌾</div>
+            <h4 class="font-display font-semibold text-sm mb-1" style="color: var(--brown-deep)">Bahan Premium</h4>
+            <p class="text-xs font-light" style="color: var(--brown-light)">Tanpa pengawet, bahan pilihan terbaik</p>
+          </div>
+          <div class="p-5 rounded-2xl" style="background: rgba(201,151,62,0.08); border: 1px solid rgba(201,151,62,0.15)">
+            <div class="text-2xl mb-2">👐</div>
+            <h4 class="font-display font-semibold text-sm mb-1" style="color: var(--brown-deep)">Handcrafted</h4>
+            <p class="text-xs font-light" style="color: var(--brown-light)">Dibuat langsung oleh tangan ahlinya</p>
+          </div>
+          <div class="p-5 rounded-2xl" style="background: rgba(201,151,62,0.08); border: 1px solid rgba(201,151,62,0.15)">
+            <div class="text-2xl mb-2">🎨</div>
+            <h4 class="font-display font-semibold text-sm mb-1" style="color: var(--brown-deep)">Custom Design</h4>
+            <p class="text-xs font-light" style="color: var(--brown-light)">Desain sesuai keinginanmu</p>
+          </div>
+          <div class="p-5 rounded-2xl" style="background: rgba(201,151,62,0.08); border: 1px solid rgba(201,151,62,0.15)">
+            <div class="text-2xl mb-2">🚚</div>
+            <h4 class="font-display font-semibold text-sm mb-1" style="color: var(--brown-deep)">Pengiriman Aman</h4>
+            <p class="text-xs font-light" style="color: var(--brown-light)">Dikemas khusus sampai tujuan</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" style="transition-delay: 0.2s">
+        <div class="relative">
+          <!-- Main image -->
+          <div class="w-full h-96 rounded-3xl overflow-hidden shadow-2xl">
+            <img src="images/karya.png" alt="Qanadila Logo"
+              class="w-full h-full object-contain animate-float p-8"
+              onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex flex-col items-center justify-center gap-2\' style=\'background:linear-gradient(135deg,#c9a882,#5c3a1e)\'><div class=\'text-7xl\'>🎂</div><p class=\'text-white opacity-60 text-sm mt-2\'>logo4.jpeg</p></div>'" />
+          </div>
+          <!-- Floating card -->
+          <div class="absolute -bottom-6 -left-6 p-5 rounded-2xl shadow-xl" style="background: var(--cream); border: 1px solid rgba(201,151,62,0.2)">
+            <p class="font-display font-semibold text-2xl" style="color: var(--gold)">4.9 ★</p>
+            <p class="text-xs font-light mt-1" style="color: var(--brown-light)">200+ ulasan pelanggan</p>
+          </div>
+          <!-- Decorative ring -->
+          <div class="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-20 animate-spin-slow"
+            style="border: 2px dashed var(--gold)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MENU ===== -->
+<section id="menu" class="py-24 md:py-32 px-6 md:px-12" style="background: var(--brown-deep)">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <p class="ornament text-xs tracking-widest font-medium mb-4" style="color: var(--gold)">✦ MENU PILIHAN</p>
+      <h2 class="font-display text-4xl md:text-5xl font-bold mb-4" style="color: var(--warm-white)">
+        Koleksi <em>Qanadila</em>
+      </h2>
+      <p class="font-serif text-lg" style="color: rgba(255,255,255,0.5)">Pilihan istimewa untuk setiap momen berharga</p>
+    </div>
+
+    <!-- Tab buttons -->
+    <div class="flex gap-8 justify-center mb-12 reveal">
+      <button onclick="showTab('cake')" id="tab-cake" class="tab-btn active text-sm tracking-wider pb-3 font-medium" style="color: var(--warm-white)">Cookies</button>
+      <button onclick="showTab('pastry')" id="tab-pastry" class="tab-btn text-sm tracking-wider pb-3 font-medium" style="color: rgba(255,255,255,0.4)">Pastry & Tart</button>
+      <button onclick="showTab('cookies')" id="tab-cookies" class="tab-btn text-sm tracking-wider pb-3 font-medium" style="color: rgba(255,255,255,0.4)">Cake</button>
+      <button onclick="showTab('hampers')" id="tab-hampers" class="tab-btn text-sm tracking-wider pb-3 font-medium" style="color: rgba(255,255,255,0.4)">Hampers</button>
+    </div>
+
+    <!-- Products Grid -->
+    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROSES ===== -->
+<section class="py-24 md:py-32 px-6 md:px-12" style="background: var(--cream)">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <p class="ornament text-xs tracking-widest font-medium mb-4" style="color: var(--gold)">✦ CARA PESAN</p>
+      <h2 class="font-display text-4xl md:text-5xl font-bold" style="color: var(--brown-deep)">
+        Mudah &amp; <em>Menyenangkan</em>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div class="text-center reveal">
+        <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl"
+          style="background: rgba(201,151,62,0.12); border: 1px solid rgba(201,151,62,0.2)">💬</div>
+        <div class="w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-3 text-xs font-bold text-white" style="background: var(--gold)">1</div>
+        <h4 class="font-display font-semibold mb-2" style="color: var(--brown-deep)">Hubungi Kami</h4>
+        <p class="text-xs font-light leading-relaxed" style="color: var(--brown-light)">Chat via WhatsApp untuk konsultasi pesanan</p>
+      </div>
+      <div class="text-center reveal" style="transition-delay: 0.1s">
+        <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl"
+          style="background: rgba(201,151,62,0.12); border: 1px solid rgba(201,151,62,0.2)">🎨</div>
+        <div class="w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-3 text-xs font-bold text-white" style="background: var(--gold)">2</div>
+        <h4 class="font-display font-semibold mb-2" style="color: var(--brown-deep)">Pilih Desain</h4>
+        <p class="text-xs font-light leading-relaxed" style="color: var(--brown-light)">Tentukan varian, ukuran, dan desain kue</p>
+      </div>
+      <div class="text-center reveal" style="transition-delay: 0.2s">
+        <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl"
+          style="background: rgba(201,151,62,0.12); border: 1px solid rgba(201,151,62,0.2)">💳</div>
+        <div class="w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-3 text-xs font-bold text-white" style="background: var(--gold)">3</div>
+        <h4 class="font-display font-semibold mb-2" style="color: var(--brown-deep)">Konfirmasi</h4>
+        <p class="text-xs font-light leading-relaxed" style="color: var(--brown-light)">Bayar DP 50% untuk konfirmasi pesanan</p>
+      </div>
+      <div class="text-center reveal" style="transition-delay: 0.3s">
+        <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl"
+          style="background: rgba(201,151,62,0.12); border: 1px solid rgba(201,151,62,0.2)">📦</div>
+        <div class="w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-3 text-xs font-bold text-white" style="background: var(--gold)">4</div>
+        <h4 class="font-display font-semibold mb-2" style="color: var(--brown-deep)">Terima Kue</h4>
+        <p class="text-xs font-light leading-relaxed" style="color: var(--brown-light)">Ambil langsung atau kami antarkan</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONI ===== -->
+<section id="testimoni" class="py-24 md:py-32 px-6 md:px-12" style="background: #f5ede0">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <p class="ornament text-xs tracking-widest font-medium mb-4" style="color: var(--gold)">✦ KATA MEREKA</p>
+      <h2 class="font-display text-4xl md:text-5xl font-bold" style="color: var(--brown-deep)">
+        Pelanggan <em>Bahagia</em>
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Testimonial 1 -->
+      <div class="testimonial-card p-8 rounded-3xl reveal" style="background: var(--cream); border: 1px solid rgba(201,151,62,0.15)">
+        <div class="flex gap-1 mb-4">
+          <span style="color: var(--gold)">★★★★★</span>
+        </div>
+        <p class="font-serif text-lg italic leading-relaxed mb-6" style="color: var(--brown-mid)">
+          "Kuenya cantik banget, rasa juga enaaaak! Pas banget buat ultah anak saya. Semua tamu pasti nanya beli di mana. Definitely repeat order!"
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style="background: var(--rose)">RN</div>
+          <div>
+            <p class="font-medium text-sm" style="color: var(--brown-deep)">Rania Natasya</p>
+            <p class="text-xs" style="color: var(--brown-light)">Jakarta Selatan</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="testimonial-card p-8 rounded-3xl reveal" style="background: var(--brown-deep); border: 1px solid rgba(201,151,62,0.2); transition-delay: 0.15s">
+        <div class="flex gap-1 mb-4">
+          <span style="color: var(--gold)">★★★★★</span>
+        </div>
+        <p class="font-serif text-lg italic leading-relaxed mb-6" style="color: rgba(255,255,255,0.8)">
+          "Wedding cake kami dari Qanadila, hasilnya luar biasa! Desainnya persis seperti yang kami minta, bahkan lebih indah. Tim kerjanya sangat profesional."
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style="background: var(--brown-light)">AF</div>
+          <div>
+            <p class="font-medium text-sm" style="color: var(--warm-white)">Aditya & Farida</p>
+            <p class="text-xs" style="color: rgba(255,255,255,0.4)">Bandung</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="testimonial-card p-8 rounded-3xl reveal" style="background: var(--cream); border: 1px solid rgba(201,151,62,0.15); transition-delay: 0.3s">
+        <div class="flex gap-1 mb-4">
+          <span style="color: var(--gold)">★★★★★</span>
+        </div>
+        <p class="font-serif text-lg italic leading-relaxed mb-6" style="color: var(--brown-mid)">
+          "Hampers lebaran dari Qanadila jadi pilihan terbaik. Packaging-nya mewah, isi kuenya enak. Semua keluarga suka banget. Sudah langganan 3 tahun!"
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style="background: var(--gold)">SH</div>
+          <div>
+            <p class="font-medium text-sm" style="color: var(--brown-deep)">Siti Halimah</p>
+            <p class="text-xs" style="color: var(--brown-light)">Depok</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA BANNER ===== -->
+<section class="py-20 px-6 md:px-12 relative overflow-hidden" style="background: linear-gradient(135deg, #2c1a0e, #8b5032)">
+  <div class="absolute inset-0" style="background: radial-gradient(ellipse at center, rgba(201,151,62,0.2) 0%, transparent 70%)"></div>
+  <div class="max-w-3xl mx-auto text-center relative z-10 reveal">
+    <div class="text-5xl mb-6"></div>
+    <h2 class="font-display text-3xl md:text-5xl font-bold mb-4" style="color: var(--warm-white)">
+      Ada Momen Spesial?
+    </h2>
+    <p class="font-serif text-lg italic mb-8" style="color: var(--gold-light)">
+      Percayakan perayaanmu pada kami. Custom order tersedia!
+    </p>
+    <a href="https://wa.me/6289508734321?text=Halo%20Qanadila%2C%20saya%20ingin%20pesan%20kue"
+      target="_blank"
+      class="btn-gold inline-flex items-center gap-3 px-10 py-4 rounded-full font-medium tracking-wider text-white shadow-2xl">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+      </svg>
+      Chat WhatsApp Sekarang
+    </a>
+  </div>
+</section>
+
+<!-- ===== GALLERY ===== -->
+<section class="py-24 md:py-32 px-6 md:px-12" style="background: var(--cream)">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <p class="ornament text-xs tracking-widest font-medium mb-4" style="color: var(--gold)">✦ GALERI</p>
+      <h2 class="font-display text-4xl md:text-5xl font-bold" style="color: var(--brown-deep)">
+        Karya <em>Terbaik Kami</em>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 reveal">
+      <div class="aspect-square rounded-2xl overflow-hidden bg-amber-100">
+        <img src="images/karya1.jpeg" alt="Galeri 1" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          onerror="this.parentElement.style.background='linear-gradient(135deg,#e8c97a,#c9973e)';this.outerHTML='<div class=\'w-full h-full flex flex-col items-center justify-center gap-1\'><div class=\'text-4xl\'>🎂</div><p class=\'text-xs text-white opacity-50 mt-1\'>galeri1.jpg</p></div>'" />
+      </div>
+      <div class="aspect-square rounded-2xl overflow-hidden bg-rose-100 md:col-span-1 lg:row-span-2">
+        <img src="images/karya2.jpeg" alt="Galeri 2" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          onerror="this.parentElement.style.background='linear-gradient(135deg,#d4867a,#8b4038)';this.outerHTML='<div class=\'w-full h-full flex flex-col items-center justify-center gap-1\'><div class=\'text-4xl\'>🍰</div><p class=\'text-xs text-white opacity-50 mt-1\'>galeri2.jpg</p></div>'" />
+      </div>
+      <div class="aspect-square rounded-2xl overflow-hidden bg-orange-100">
+        <img src="images/karya3.jpeg" alt="Galeri 3" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          onerror="this.parentElement.style.background='linear-gradient(135deg,#a0633a,#5c3a1e)';this.outerHTML='<div class=\'w-full h-full flex flex-col items-center justify-center gap-1\'><div class=\'text-4xl\'>🧁</div><p class=\'text-xs text-white opacity-50 mt-1\'>galeri3.jpg</p></div>'" />
+      </div>
+      <div class="aspect-square rounded-2xl overflow-hidden bg-orange-100">
+        <img src="images/karya2.jpeg" alt="Galeri 3" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          onerror="this.parentElement.style.background='linear-gradient(135deg,#a0633a,#5c3a1e)';this.outerHTML='<div class=\'w-full h-full flex flex-col items-center justify-center gap-1\'><div class=\'text-4xl\'>🧁</div><p class=\'text-xs text-white opacity-50 mt-1\'>galeri3.jpg</p></div>'" />
+    </div>
+
+    <div class="text-center mt-8 reveal">
+      <a href="https://instagram.com/qanadila.cake" target="_blank"
+        class="inline-flex items-center gap-2 text-sm tracking-wider font-medium"
+        style="color: var(--brown-light)">
+        Lihat lebih banyak di Instagram
+        <span style="color: var(--gold)">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== KONTAK ===== -->
+<section id="kontak" class="py-24 md:py-32 px-6 md:px-12" style="background: var(--brown-deep)">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-16">
+      <div class="reveal">
+        <p class="ornament text-xs tracking-widest font-medium mb-4" style="color: var(--gold)">✦ HUBUNGI KAMI</p>
+        <h2 class="font-display text-4xl md:text-5xl font-bold mb-6" style="color: var(--warm-white)">
+          Mari <em>Terhubung</em>
+        </h2>
+        <p class="font-light mb-10" style="color: rgba(255,255,255,0.5)">
+          Kami siap membantu mewujudkan kue impianmu. Hubungi kami melalui salah satu kanal berikut.
+        </p>
+
+        <div class="space-y-6">
+          <a href="https://wa.me/6281234567890" target="_blank" class="flex items-center gap-4 group">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-transform group-hover:scale-110" style="background: rgba(201,151,62,0.15)">📱</div>
+            <div>
+              <p class="text-xs tracking-widest mb-1" style="color: rgba(255,255,255,0.4)">WHATSAPP</p>
+              <p class="font-medium" style="color: var(--warm-white)">+62 895-0873-4321</p>
+            </div>
+          </a>
+          <a href="https://instagram.com/qanadila.cake" target="_blank" class="flex items-center gap-4 group">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-transform group-hover:scale-110" style="background: rgba(201,151,62,0.15)">📸</div>
+            <div>
+              <p class="text-xs tracking-widest mb-1" style="color: rgba(255,255,255,0.4)">INSTAGRAM</p>
+              <p class="font-medium" style="color: var(--warm-white)">@yuliyulianti4473</p>
+            </div>
+          </a>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl" style="background: rgba(201,151,62,0.15)">📍</div>
+            <div>
+              <p class="text-xs tracking-widest mb-1" style="color: rgba(255,255,255,0.4)">LOKASI</p>
+              <p class="font-medium" style="color: var(--warm-white)">Serang, Banten</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl" style="background: rgba(201,151,62,0.15)">🕐</div>
+            <div>
+              <p class="text-xs tracking-widest mb-1" style="color: rgba(255,255,255,0.4)">JAM OPERASIONAL</p>
+              <p class="font-medium" style="color: var(--warm-white)">Senin – Sabtu, 08.00 – 20.00</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Form -->
+      <div class="reveal" style="transition-delay: 0.2s">
+        <div class="p-8 rounded-3xl" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(201,151,62,0.15)">
+          <h3 class="font-display text-2xl font-semibold mb-6" style="color: var(--warm-white)">Kirim Pesanan</h3>
+          <div class="space-y-4">
+            <div>
+              <label class="text-xs tracking-widest block mb-2" style="color: rgba(255,255,255,0.4)">NAMA LENGKAP</label>
+              <input id="form-name" type="text" placeholder="Nama kamu"
+                class="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
+                style="background: rgba(255,255,255,0.06); border: 1px solid rgba(201,151,62,0.2); color: white; placeholder-color: rgba(255,255,255,0.3)">
+            </div>
+            <div>
+              <label class="text-xs tracking-widest block mb-2" style="color: rgba(255,255,255,0.4)">NOMOR HP / WA</label>
+              <input id="form-phone" type="tel" placeholder="08xxxxxxxxxx"
+                class="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                style="background: rgba(255,255,255,0.06); border: 1px solid rgba(201,151,62,0.2); color: white">
+            </div>
+            <div>
+              <label class="text-xs tracking-widest block mb-2" style="color: rgba(255,255,255,0.4)">JENIS KUE</label>
+              <select id="form-type" class="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                style="background: #3a2010; border: 1px solid rgba(201,151,62,0.2); color: rgba(255,255,255,0.8)">
+                <option value="">Pilih jenis kue</option>
+                <option>Birthday Cake</option>
+                <option>Wedding Cake</option>
+                <option>Tart & Pastry</option>
+                <option>Cookies</option>
+                <option>Hampers</option>
+                <option>Custom Order</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs tracking-widest block mb-2" style="color: rgba(255,255,255,0.4)">PESAN / DETAIL PESANAN</label>
+              <textarea id="form-message" rows="3" placeholder="Ceritakan detail pesananmu..."
+                class="w-full px-4 py-3 rounded-xl text-sm outline-none resize-none"
+                style="background: rgba(255,255,255,0.06); border: 1px solid rgba(201,151,62,0.2); color: white"></textarea>
+            </div>
+            <button onclick="sendOrder()"
+              class="btn-gold w-full py-4 rounded-xl font-medium tracking-wider text-white shadow-lg mt-2">
+              Kirim via WhatsApp ✦
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="py-12 px-6 md:px-12" style="background: #1a0f06; border-top: 1px solid rgba(201,151,62,0.1)">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center border" style="border-color: var(--gold); background: rgba(201,151,62,0.1)">
+          <span style="color: var(--gold); font-size: 0.75rem">✦</span>
+        </div>
+        <span class="font-display font-bold text-lg" style="color: var(--warm-white)">Qanadila</span>
+      </div>
+
+      <p class="font-serif italic text-sm" style="color: rgba(255,255,255,0.3)">
+        "Setiap gigitan adalah cerita cinta"
+      </p>
+
+      <div class="flex gap-4">
+        <a href="https://wa.me/6281234567890" target="_blank"
+          class="w-9 h-9 rounded-full flex items-center justify-center text-sm transition-transform hover:scale-110"
+          style="background: rgba(201,151,62,0.15); color: var(--gold)">
+          📱
+        </a>
+        <a href="https://instagram.com/qanadila.cake" target="_blank"
+          class="w-9 h-9 rounded-full flex items-center justify-center text-sm transition-transform hover:scale-110"
+          style="background: rgba(201,151,62,0.15); color: var(--gold)">
+          📸
+        </a>
+        <a href="#"
+          class="w-9 h-9 rounded-full flex items-center justify-center text-sm transition-transform hover:scale-110"
+          style="background: rgba(201,151,62,0.15); color: var(--gold)">
+          🛒
+        </a>
+      </div>
+    </div>
+
+    <div class="divider-gold my-8"></div>
+
+    <p class="text-center text-xs" style="color: rgba(255,255,255,0.2)">
+      © 2026 Qanadila. Semua hak dilindungi. Dibuat dengan ❤️ untuk kamu.
+    </p>
+  </div>
+</footer>
+
+<script>
+  // ===== NAVBAR SCROLL =====
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 60) {
+      nav.classList.add('scrolled');
+      document.getElementById('nav-logo').style.color = '#2c1a0e';
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+
+  // ===== MOBILE MENU =====
+  function toggleMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('hidden');
+  }
+
+  // ===== PRODUCT DATA =====
+  // Ganti nilai "img" dengan nama file foto kamu di folder images/
+  const products = {
+    cake: [
+      { img: 'images/logo1.jpeg', name: 'Sagu Keju', desc: 'Teksturnya renyah namun ringan, dengan aroma keju yang gurih dan rasa yang langsung meleleh di lidah.', price: 'Rp 75.000', tag: 'Premium' },
+      { img: 'images/logo2.jpeg', name: 'Kastengel', desc: 'Kue keju yang gurih, renyah, dan harum, dengan rasa keju yang kuat dan sedikit asin yang bikin ketagihan.', price: 'Rp 75.000', tag: 'Premium' },
+      { img: 'images/logo3.jpeg', name: 'Nastar', desc: 'Kue lembut dengan isian selai nanas manis-asam yang lumer di mulut, memberikan sensasi hangat dan legit saat digigit.', price: 'Rp 75.000', tag: 'Bestseller' },
+      { img: 'images/logo5.png',  name: 'Putri Salju', desc: 'Cream cheese frosting, warna merah menawan yang menggoda', price: 'Rp 75.000', tag: 'Premium' },
+      { img: 'images/logo6.png',  name: 'Tumbprint', desc: 'Kue kecil dengan cekungan berisi selai manis di tengahnya, memadukan tekstur renyah dengan rasa buah yang segar.', price: 'Rp 75.000', tag: 'Baru' },
+      { img: 'images/logo7.png',  name: 'Sagu keju', desc: 'Kue lembut yang dibalut gula halus, menghadirkan rasa manis lembut yang langsung lumer begitu masuk ke mulut.', price: 'Mulai Rp 75.000', tag: 'Custom' },
+    ],
+    pastry: [
+      { img: 'images/pastry1.jpg', emoji: '🥐', name: 'Croissant Butter', desc: 'Berlapis-lapis, renyah di luar lembut di dalam', price: 'Rp 28.000', tag: 'Favorit' },
+      { img: 'images/pastry2.jpg', emoji: '🍮', name: 'Portuguese Egg Tart', desc: 'Custard telur creamy dalam kulit pastry yang flaky', price: 'Rp 22.000', tag: 'Populer' },
+      { img: 'images/pastry3.jpg', emoji: '🥧', name: 'Fruit Tart', desc: 'Cream pastiseri, buah segar seasonal, glaze mengilap', price: 'Rp 85.000', tag: '' },
+      { img: 'images/pastry4.jpg', emoji: '🥐', name: 'Pain au Chocolat', desc: 'Croissant isi cokelat Valrhona premium', price: 'Rp 32.000', tag: 'Baru' },
+      { img: 'images/pastry5.jpg', emoji: '🍰', name: 'Mille Feuille', desc: 'Seribu lapis puff pastry dengan vanilla cream', price: 'Rp 55.000', tag: '' },
+      { img: 'images/pastry6.jpg', emoji: '🥄', name: 'Crème Brûlée Tart', desc: 'Tart shell crispy dengan custard brûlée di atasnya', price: 'Rp 65.000', tag: 'Premium' },
+    ],
+    cookies: [
+      { img: 'images/cookies1.jpg', emoji: '🍪', name: 'Nastar Premium', desc: 'Nanas lokal pilihan, buttery shortcrust, favorit Lebaran', price: 'Rp 120.000 / toples', tag: 'Bestseller' },
+      { img: 'images/cookies2.jpg', emoji: '🍪', name: 'Choco Chip Cookies', desc: 'Renyah di pinggir, chewy di tengah, full chocolate chip', price: 'Rp 85.000 / toples', tag: '' },
+      { img: 'images/cookies3.jpg', emoji: '🌙', name: 'Kastengel Keju', desc: 'Keju gouda asli, gurih dan renyah, legendaris banget', price: 'Rp 130.000 / toples', tag: 'Favorit' },
+      { img: 'images/cookies4.jpg', emoji: '❄️', name: 'Snowball Cookies', desc: 'Lembut, ringan, bertabur gula halus layaknya salju', price: 'Rp 90.000 / toples', tag: '' },
+      { img: 'images/cookies5.jpg', emoji: '🌰', name: 'Almond Crispy', desc: 'Irisan almond panggang dalam adonan butter tipis', price: 'Rp 95.000 / toples', tag: 'Baru' },
+      { img: 'images/cookies6.jpg', emoji: '🍯', name: 'Lidah Kucing Madu', desc: 'Tipis, renyah, manis madu Sumbawa pilihan', price: 'Rp 80.000 / toples', tag: '' },
+    ],
+    hampers: [
+      { img: 'images/hampers1.jpg', emoji: '🎁', name: 'Hampers Lebaran Basic', desc: '3 toples cookies pilihan + box premium eksklusif', price: 'Rp 280.000', tag: 'Populer' },
+      { img: 'images/hampers2.jpg', emoji: '🎀', name: 'Hampers Lebaran Deluxe', desc: '5 toples cookies + 1 kue + kartu ucapan personal', price: 'Rp 480.000', tag: 'Rekomendasi' },
+      { img: 'images/hampers3.jpg', emoji: '💝', name: 'Hampers Ulang Tahun', desc: 'Birthday cake mini + 2 toples cookies + balon & dekor', price: 'Rp 350.000', tag: '' },
+      { img: 'images/hampers4.jpg', emoji: '💒', name: 'Wedding Hampers', desc: 'Souvenir pernikahan premium, min. order 50 pcs', price: 'Rp 75.000 / pcs', tag: 'Grosir' },
+      { img: 'images/hampers5.jpg', emoji: '🎄', name: 'Hampers Natal', desc: 'Paket spesial Natal dengan cookies & brownies premium', price: 'Rp 320.000', tag: 'Limited' },
+      { img: 'images/hampers6.jpg', emoji: '✨', name: 'Custom Hampers', desc: 'Buat sendiri isi hampers sesuai budget dan kebutuhanmu', price: 'Mulai Rp 150.000', tag: 'Custom' },
+    ]
+  };
+
+  function showTab(tab) {
+    ['cake', 'pastry', 'cookies', 'hampers'].forEach(t => {
+      const btn = document.getElementById(`tab-${t}`);
+      if (t === tab) {
+        btn.classList.add('active');
+        btn.style.color = '#fdf6ec';
+      } else {
+        btn.classList.remove('active');
+        btn.style.color = 'rgba(255,255,255,0.4)';
+      }
+    });
+
+    const grid = document.getElementById('products-grid');
+    grid.innerHTML = '';
+    products[tab].forEach((p, i) => {
+      const card = document.createElement('div');
+      card.className = 'product-card rounded-3xl overflow-hidden';
+      card.style.background = 'rgba(255,255,255,0.04)';
+      card.style.border = '1px solid rgba(201,151,62,0.15)';
+      card.style.animationDelay = `${i * 0.08}s`;
+      card.innerHTML = `
+        <div class="h-44 overflow-hidden relative" style="background: linear-gradient(135deg, rgba(201,151,62,0.15), rgba(92,58,30,0.3))">
+          <img src="${p.img}" alt="${p.name}"
+            class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'" />
+          <div class="absolute inset-0 items-center justify-center text-6xl" style="display:none">${p.emoji}</div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <h3 class="font-display font-semibold text-base leading-tight" style="color: #fffdf8">${p.name}</h3>
+            ${p.tag ? `<span class="shrink-0 px-2 py-0.5 rounded-full text-xs font-medium" style="background: rgba(201,151,62,0.2); color: #e8c97a">${p.tag}</span>` : ''}
+          </div>
+          <p class="text-xs font-light leading-relaxed mb-4" style="color: rgba(255,255,255,0.45)">${p.desc}</p>
+          <div class="flex items-center justify-between">
+            <span class="font-display font-semibold" style="color: #c9973e">${p.price}</span>
+            <a href="https://wa.me/6281234567890?text=Halo%20Qanadila%2C%20saya%20mau%20pesan%20${encodeURIComponent(p.name)}" target="_blank"
+              class="text-xs px-4 py-2 rounded-full font-medium tracking-wider transition-all hover:opacity-80"
+              style="background: rgba(201,151,62,0.15); color: #e8c97a; border: 1px solid rgba(201,151,62,0.25)">
+              Pesan →
+            </a>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+  }
+
+  showTab('cake');
+
+  // ===== SCROLL REVEAL =====
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // ===== SEND ORDER VIA WA =====
+  function sendOrder() {
+    const name = document.getElementById('form-name').value.trim();
+    const phone = document.getElementById('form-phone').value.trim();
+    const type = document.getElementById('form-type').value;
+    const message = document.getElementById('form-message').value.trim();
+
+    if (!name || !phone) {
+      alert('Mohon isi nama dan nomor HP terlebih dahulu 🙏');
+      return;
+    }
+
+    const text = `Halo Qanadila! 🎂\n\nNama: ${name}\nNo. HP: ${phone}\nJenis Kue: ${type || '-'}\nDetail: ${message || '-'}\n\nSaya ingin memesan kue. Terima kasih!`;
+    window.open(`https://wa.me/6281234567890?text=${encodeURIComponent(text)}`, '_blank');
+  }
+</script>
+
+</body>
+</html>
